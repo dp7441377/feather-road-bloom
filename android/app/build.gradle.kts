@@ -1,0 +1,93 @@
+import java.util.Properties
+
+// White version by default (no google-services). If a specific task needs
+// Firebase — add id("com.google.gms.google-services") here + the matching plugin
+// in android/settings.gradle.kts (see github_build.md in the workspace).
+plugins {
+    id("com.android.application")
+    id("kotlin-android")
+    id("dev.flutter.flutter-gradle-plugin")
+}
+
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.inputStream().use(keystoreProperties::load)
+}
+
+fun signingValue(envKey: String, propertyKey: String): String? {
+    return System.getenv(envKey)?.takeIf { it.isNotBlank() }
+        ?: keystoreProperties.getProperty(propertyKey)?.takeIf { it.isNotBlank() }
+}
+
+val storeFilePath = signingValue("ANDROID_KEYSTORE_PATH", "storeFile")
+val releaseStorePassword = signingValue("ANDROID_KEYSTORE_PASSWORD", "storePassword")
+val releaseKeyAlias = signingValue("ANDROID_KEY_ALIAS", "keyAlias")
+val releaseKeyPassword = signingValue("ANDROID_KEY_PASSWORD", "keyPassword")
+val hasReleaseSigning = listOf(
+    storeFilePath,
+    releaseStorePassword,
+    releaseKeyAlias,
+    releaseKeyPassword,
+).all { !it.isNullOrBlank() }
+
+android {
+    namespace = "com.jMMFzKV.rCxDCMH"
+    compileSdk = 36
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+    }
+
+    val defaultBuildNumber = 1
+    val defaultVersionName = "1.0"
+    val buildNumber = System.getenv("BUILD_NUMBER")?.toIntOrNull() ?: defaultBuildNumber
+    val versionNameValue = System.getenv("APP_VERSION")?.takeIf { it.isNotBlank() }
+        ?: defaultVersionName
+
+    defaultConfig {
+        applicationId = "com.jMMFzKV.rCxDCMH"
+        minSdk = 26
+        targetSdk = 36
+        versionCode = buildNumber
+        versionName = versionNameValue
+        multiDexEnabled = true
+    }
+
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = file(storeFilePath!!)
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            isShrinkResources = false
+
+            if (hasReleaseSigning) {
+                signingConfig = signingConfigs.getByName("release")
+            }
+        }
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+}
+
+flutter {
+    source = "../.."
+}

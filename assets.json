@@ -1,0 +1,64 @@
+{
+  "assets": [
+    {
+      "name": "icon_1024",
+      "type": "icon",
+      "prompt": "App icon, one single glossy 3D golden feather standing upright and centered, thick rounded claymorphism forms, warm cream to gold radial gradient background, soft orange drop shadow, crisp, no text, no scene"
+    },
+    {
+      "name": "bg_loader",
+      "type": "bg",
+      "prompt": "Vertical 9:16 mobile game loader background, deep plum dusk sky over a quiet dark farm field, flat vector shapes, very low contrast, moody, no text, no UI elements"
+    },
+    {
+      "name": "bg_menu",
+      "type": "bg",
+      "prompt": "Vertical 9:16 mobile game menu background, sunny cream farm path winding through blooming flowers and soft green hills, flat vector shapes, warm and vibrant, no text, no UI elements"
+    },
+    {
+      "name": "bg_map",
+      "type": "bg",
+      "prompt": "Vertical 9:16 mobile game background, soft blurred cream countryside with rolling golden fields and hedgerows, low contrast for UI overlay, no text, no UI elements"
+    },
+    {
+      "name": "bg_game",
+      "type": "bg",
+      "prompt": "Vertical 9:16 mobile game background, very soft blurred cream and sage farmland, almost flat, low contrast for UI overlay, no text, no UI elements"
+    },
+    {
+      "name": "bg_result",
+      "type": "bg",
+      "prompt": "Vertical 9:16 mobile game background, blooming garden gate at golden hour surrounded by flowers, soft focus, warm cream light, no text, no UI elements"
+    },
+    {
+      "name": "sprite_bird_hero",
+      "type": "sprite",
+      "prompt": "One single cute cartoon hen with bright warm plumage, centered icon, glossy 3D render, isolated on plain white, no other objects"
+    },
+    {
+      "name": "sprite_feather",
+      "type": "sprite",
+      "prompt": "One single cute cartoon golden feather, centered icon, glossy 3D render, isolated on plain white, no other objects"
+    },
+    {
+      "name": "sprite_nest",
+      "type": "sprite",
+      "prompt": "One single cute cartoon straw nest, centered icon, glossy 3D render, isolated on plain white, no other objects"
+    },
+    {
+      "name": "sprite_garden",
+      "type": "sprite",
+      "prompt": "One single cute cartoon flower garden arch gate, centered icon, glossy 3D render, isolated on plain white, no other objects"
+    },
+    {
+      "name": "sprite_star",
+      "type": "sprite",
+      "prompt": "One single cute cartoon gold star, centered icon, glossy 3D render, isolated on plain white, no other objects"
+    },
+    {
+      "name": "button_cta",
+      "type": "button",
+      "prompt": "Horizontal game CTA button background, warm cream and gold claymorphism gradient, glossy, rounded, soft inner highlight, no text"
+    }
+  ]
+}

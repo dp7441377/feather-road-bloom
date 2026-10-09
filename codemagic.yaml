@@ -1,0 +1,52 @@
+# cm-build-flutter.yaml (Flutter) — canonical Codemagic workflow for API-driven builds.
+# cm-prepare.sh copies this into a Flutter project's pushed repo as codemagic.yaml.
+# Signing creds arrive as per-build env vars (see cm-build.yaml header).
+# Mirrors scripts/lib/gh-build-flutter.yml: exports both dart-defines and the
+# ANDROID_KEYSTORE_* env names so whichever the project's build.gradle reads works.
+#
+# 25.09.2026 — also serves the PRE-REVIEW compile (build-apk-cloud.sh): every
+# step's output is tee'd into build-logs/*.log and published as an artefact even
+# when the build fails, so cm-fetch-aab.sh can hand the compile error to heal-build.sh.
+workflows:
+  android-release:
+    name: Android Release Build (Flutter)
+    max_build_duration: 60
+    environment:
+      # Pinned, NOT `stable`. The generated projects pin AGP 8.9.1 in
+      # android/settings.gradle.kts, and Flutter releases newer than 3.41.9
+      # hard-fail with "Android Gradle Plugin version 8.9.1 is lower than
+      # Flutter's minimum supported version 8.11.1" before any code compiles
+      # (ANDROID-3179, first Codemagic run). 3.41.9 is the workspace SDK that
+      # produced the locally verified APK/AAB, so CI now uses the same
+      # toolchain as the local build instead of drifting ahead of it.
+      # If this is ever bumped, bump AGP in template-flutter to match.
+      flutter: 3.41.9
+      java: 17
+    scripts:
+      - name: Flutter pub get
+        script: |
+          set -o pipefail
+          mkdir -p build-logs
+          flutter pub get 2>&1 | tee build-logs/pubget.log
+      - name: Decode keystore
+        script: |
+          mkdir -p android/app
+          echo "$MYAPP_RELEASE_KEYSTORE_BASE64" | base64 -d > android/app/release.keystore
+          ls -lh android/app/release.keystore
+      - name: Build AAB + APK
+        script: |
+          set -o pipefail
+          export ANDROID_KEYSTORE_PATH="$CM_BUILD_DIR/android/app/release.keystore"
+          export ANDROID_KEYSTORE_PASSWORD="$MYAPP_RELEASE_STORE_PASSWORD"
+          export ANDROID_KEY_ALIAS="$MYAPP_RELEASE_KEY_ALIAS"
+          export ANDROID_KEY_PASSWORD="$MYAPP_RELEASE_KEY_PASSWORD"
+          # Same signing config (env-first in build.gradle.kts) → both artefacts
+          # are signed with the release key. Dart-defines mirror the env for
+          # projects whose build.gradle reads defines instead.
+          DEFINES="--dart-define=KEYSTORE_PATH=$ANDROID_KEYSTORE_PATH --dart-define=STORE_PASS=$MYAPP_RELEASE_STORE_PASSWORD --dart-define=KEY_ALIAS=$MYAPP_RELEASE_KEY_ALIAS --dart-define=KEY_PASS=$MYAPP_RELEASE_KEY_PASSWORD"
+          flutter build appbundle --release $DEFINES 2>&1 | tee build-logs/flutter-aab.log
+          flutter build apk --release $DEFINES 2>&1 | tee build-logs/flutter-apk.log
+    artifacts:
+      - build/app/outputs/bundle/release/*.aab
+      - build/app/outputs/flutter-apk/app-release.apk
+      - build-logs/*.log

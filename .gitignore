@@ -1,0 +1,72 @@
+# Generated React Native project — App Factory .gitignore
+
+# ----- JS / RN -----
+node_modules/
+.yarn/cache
+.yarn/install-state.gz
+npm-debug.log
+yarn-error.log
+*.log
+.metro-health-check*
+coverage/
+dist/
+build/
+.watchman/
+.pnpm-debug.log
+*.jsbundle
+
+# ----- Android build outputs -----
+android/.gradle/
+android/build/
+android/app/build/
+android/app/release/
+android/captures/
+android/app/debug.keystore
+android/app/release.keystore
+android/app/*.keystore
+*.apk
+*.aab
+*.hprof
+*.jks
+.cxx/
+
+# ----- Android local config (keystore creds, SDK path) -----
+android/local.properties
+android/keystore.properties
+keystore.properties
+android/gradle.properties.local
+
+# ----- iOS -----
+ios/build/
+ios/Pods/
+ios/*.xcworkspace/xcuserdata/
+*.xcuserstate
+Podfile.lock
+**/.xcode.env.local
+xcuserdata
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+
+# ----- Editor / OS -----
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# ----- App Factory internals (do NOT ship) -----
+prompts/
+assets-failed.log
+assets-gen.log
+emu-boot.log
+artifacts/
+.env.secrets
+android/key.properties
+key.properties

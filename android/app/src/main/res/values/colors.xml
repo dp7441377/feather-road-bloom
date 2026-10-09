@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Native launch window. Matches LoaderScreen's deep plum so the first
+         captured frame is branded instead of a white (or, in dark mode, pure
+         black) rectangle. -->
+    <color name="launch_bg">#302A3A</color>
+</resources>

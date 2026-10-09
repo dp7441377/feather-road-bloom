@@ -1,0 +1,8 @@
+# key.properties — local signing config for Flutter Android.
+# generate-flutter.sh пишет реальный key.properties в android/key.properties (gitignored)
+# с путём до workspace/keystore/release.keystore + общими паролями.
+# Этот .example только для справки.
+storeFile=C:/Users/Administrator/Desktop/AndroidWorkspace/keystore/release.keystore
+storePassword=BandaApp1d4e60a379b1
+keyAlias=release
+keyPassword=BandaApp1d4e60a379b1
